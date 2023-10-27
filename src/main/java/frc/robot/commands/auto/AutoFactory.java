@@ -22,7 +22,7 @@ public class AutoFactory extends SequentialCommandGroup {
             case "Bottom":
 
                 //Eject Cube in the center
-                addCommands(new EjectCube(BotSubsystems.intake, AutoConstants.DEFAULT_EJECT_CUBE_TIME));
+                //addCommands(new EjectCube(BotSubsystems.intake, AutoConstants.DEFAULT_EJECT_CUBE_TIME));
                 isSideways = true;       
                 break;
 

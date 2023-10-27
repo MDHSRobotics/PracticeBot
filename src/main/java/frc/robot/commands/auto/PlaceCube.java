@@ -20,9 +20,6 @@ public class PlaceCube extends SequentialCommandGroup{
             //Move forward to be over the pole
             new TimedSwerve(BotSubsystems.swerveDriver, AutoConstants.DEFAULT_DRIVE_SPEED, 0, 0, DRIVE_FORWARD_TIME),
 
-            //Open the clamp
-            BotSubsystems.forklift.openClampCommand(),
-
             new TimedSwerve(BotSubsystems.swerveDriver, -AutoConstants.DEFAULT_DRIVE_SPEED, 0, 0, DRIVE_BACKWARD_TIME),
 
             new ForkliftToPosition(BotSubsystems.forklift, AutoConstants.Levels.PICKUP)

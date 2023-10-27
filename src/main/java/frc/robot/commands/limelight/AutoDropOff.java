@@ -21,7 +21,6 @@ public class AutoDropOff extends SequentialCommandGroup{
             addCommands(new TimedSwerve(BotSubsystems.swerveDriver, 0, -0.3, 0, 0.5));
         }
 
-        addCommands(BotSubsystems.forklift.openClampCommand());
 
         
 

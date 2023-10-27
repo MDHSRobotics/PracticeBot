@@ -1,4 +1,5 @@
-package frc.robot.subsystems;
+// Not wired
+/*package frc.robot.subsystems;
 
 import java.util.Map;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -24,4 +25,4 @@ public class Intake extends GenericSubsystem {
         return this.startEnd(() -> super.move("Intake", -1), () -> super.move("Intake", 0)).withTimeout(time);
     }
 
-}
+}*/

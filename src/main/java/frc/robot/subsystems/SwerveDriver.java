@@ -8,19 +8,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.BotSensors;
 import frc.robot.consoles.Logger;
+import frc.robot.devices.DevSparkMax;
 import frc.robot.devices.DevSwerveModule;
-import static frc.robot.subsystems.Devices.*;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -39,6 +40,31 @@ public class SwerveDriver extends SubsystemBase {
             new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
             new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2),
             new Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2));
+
+    // Spark Max Controllers
+    public static final int motorIdDriveFL = 11;
+    public static final int motorIdDriveFR = 5;
+    public static final int motorIdDriveRL = 13;
+    public static final int motorIdDriveRR = 2;
+    public static final int motorIdTurnFL = 12;
+    public static final int motorIdTurnFR = 21;
+    public static final int motorIdTurnRL = 7;
+    public static final int motorIdTurnRR = 10;
+
+    // SwerveDrive
+    public static DevSparkMax sparkMaxSwerveDriveFL = new DevSparkMax("sparkMaxSwerveDriveWheelFrontLeft", motorIdDriveFL, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveDriveFR = new DevSparkMax("sparkMaxSwerveDriveWheelFrontRight", motorIdDriveFR, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveDriveRL = new DevSparkMax("sparkMaxSwerveDriveWheelRearLeft", motorIdDriveRL, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveDriveRR = new DevSparkMax("sparkMaxSwerveDriveWheelRearRight", motorIdDriveRR, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveTurnFL = new DevSparkMax("sparkMaxSwerveTurnWheelFrontLeft", motorIdTurnFL, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveTurnFR = new DevSparkMax("sparkMaxSwerveTurnWheelFrontRight", motorIdTurnFR, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveTurnRL = new DevSparkMax("sparkMaxSwerveTurnWheelRearLeft", motorIdTurnRL, MotorType.kBrushless);
+    public static DevSparkMax sparkMaxSwerveTurnRR = new DevSparkMax("sparkMaxSwerveTurnWheelRearRight", motorIdTurnRR, MotorType.kBrushless);
+
+    public static CANCoder canCoderFL = new CANCoder(1);
+    public static CANCoder canCoderFR = new CANCoder(3);
+    public static CANCoder canCoderRL = new CANCoder(2);
+    public static CANCoder canCoderRR = new CANCoder(4);
 
     /* The absolute encoder retains its value even after the robot has been
        powered off. Note that this behavior must be configured using the Phoenix Tuner
@@ -69,9 +95,9 @@ public class SwerveDriver extends SubsystemBase {
 
     private final DevSwerveModule frontLeft = new DevSwerveModule(
         "Front Left",
-        Devices.talonFxSwerveDriveFL,
-        Devices.talonFxSwerveTurnFL,
-        Devices.canCoderFL,
+        sparkMaxSwerveDriveFL,
+        sparkMaxSwerveTurnFL,
+        canCoderFL,
         true,
         true,
         true,
@@ -79,9 +105,9 @@ public class SwerveDriver extends SubsystemBase {
 
     private final DevSwerveModule frontRight = new DevSwerveModule(
         "Front Right",
-        Devices.talonFxSwerveDriveFR,
-        Devices.talonFxSwerveTurnFR,
-        Devices.canCoderFR,
+        sparkMaxSwerveDriveFR,
+        sparkMaxSwerveTurnFR,
+        canCoderFR,
         false,
         true,
         true,
@@ -89,9 +115,9 @@ public class SwerveDriver extends SubsystemBase {
 
     private final DevSwerveModule rearLeft = new DevSwerveModule(
         "Rear Left",
-        Devices.talonFxSwerveDriveRL,
-        Devices.talonFxSwerveTurnRL,
-        Devices.canCoderRL,
+        sparkMaxSwerveDriveRL,
+        sparkMaxSwerveTurnRL,
+        canCoderRL,
         true,
         true,
         true,
@@ -99,9 +125,9 @@ public class SwerveDriver extends SubsystemBase {
 
     private final DevSwerveModule rearRight = new DevSwerveModule(
         "Rear Right",
-        Devices.talonFxSwerveDriveRR,
-        Devices.talonFxSwerveTurnRR,
-        Devices.canCoderRR,
+        sparkMaxSwerveDriveRR,
+        sparkMaxSwerveTurnRR,
+        canCoderRR,
         false,
         true,
         true,
@@ -126,10 +152,10 @@ public class SwerveDriver extends SubsystemBase {
         //talonFxSwerveDriveRL.configOpenloopRamp(RAMP_TIME);
         //talonFxSwerveDriveRR.configOpenloopRamp(RAMP_TIME);
 
-        talonFxSwerveDriveFL.setNeutralMode(NeutralMode.Brake);
-        talonFxSwerveDriveFR.setNeutralMode(NeutralMode.Brake);
-        talonFxSwerveDriveRL.setNeutralMode(NeutralMode.Brake);
-        talonFxSwerveDriveRR.setNeutralMode(NeutralMode.Brake);
+        sparkMaxSwerveDriveFL.setIdleMode(IdleMode.kBrake);
+        sparkMaxSwerveDriveFR.setIdleMode(IdleMode.kBrake);
+        sparkMaxSwerveDriveRL.setIdleMode(IdleMode.kBrake);
+        sparkMaxSwerveDriveRR.setIdleMode(IdleMode.kBrake);
 
         frontLeft.resetEncoders();
         frontRight.resetEncoders();
@@ -261,17 +287,17 @@ public class SwerveDriver extends SubsystemBase {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     -xSpeed, ySpeed, -turningSpeed, getRotation2d());
-            talonFxSwerveTurnFL.configOpenloopRamp(RAMP_TIME);
-            talonFxSwerveTurnFR.configOpenloopRamp(RAMP_TIME);
-            talonFxSwerveTurnRL.configOpenloopRamp(RAMP_TIME);
-            talonFxSwerveTurnRR.configOpenloopRamp(RAMP_TIME);
+            sparkMaxSwerveTurnFL.setOpenLoopRampRate(RAMP_TIME);
+            sparkMaxSwerveTurnFR.setOpenLoopRampRate(RAMP_TIME);
+            sparkMaxSwerveTurnRL.setOpenLoopRampRate(RAMP_TIME);
+            sparkMaxSwerveTurnRR.setOpenLoopRampRate(RAMP_TIME);
         } else {
             // Relative to robot
             chassisSpeeds = new ChassisSpeeds(-xSpeed, ySpeed, -turningSpeed);
-            talonFxSwerveTurnFL.configOpenloopRamp(0);
-            talonFxSwerveTurnFR.configOpenloopRamp(0);
-            talonFxSwerveTurnRL.configOpenloopRamp(0);
-            talonFxSwerveTurnRR.configOpenloopRamp(0);
+            sparkMaxSwerveTurnFL.setOpenLoopRampRate(0);
+            sparkMaxSwerveTurnFR.setOpenLoopRampRate(0);
+            sparkMaxSwerveTurnRL.setOpenLoopRampRate(0);
+            sparkMaxSwerveTurnRR.setOpenLoopRampRate(0);
         }
 
         //SmartDashboard.putString("06: Chassis Speeeds", chassisSpeeds.toString());

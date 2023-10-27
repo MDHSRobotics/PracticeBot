@@ -35,8 +35,6 @@ public class BotCommands {
     public static ForkliftToPosition forkliftHighLevelPosition;
     public static ForkliftToPosition forkliftMediumLevelPosition;
     public static QuickForklift quickForklift;
-    public static CommandBase openClamp;
-    public static CommandBase closeClamp;
     public static CommandBase resetEncoders;
 
     //Intake
@@ -81,13 +79,11 @@ public class BotCommands {
         resetEncoders = BotSubsystems.forklift.resetEncoders();
         
 
-        //Intake
+        //Intake not wired yet
+        /*
         moveIntake = BotSubsystems.intake.runIntakeCommand();
         timedIntake = BotSubsystems.intake.runIntakeTime(1.0);
-        
-        // Pneumatics
-        openClamp = BotSubsystems.forklift.openClampCommand();
-        closeClamp = BotSubsystems.forklift.closeClampCommand();
+        */
 
         // Auto Commands 
         placeCubeInner = new AutoFactory("Center", "Top");

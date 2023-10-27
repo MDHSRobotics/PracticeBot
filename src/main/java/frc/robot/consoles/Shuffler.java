@@ -142,8 +142,6 @@ public class Shuffler {
         ShuffleLogger.logTrivial("Initializing Shuffler...");
 
         
-        m_forklftCommandLayout.add("Open Clamp", BotCommands.openClamp);
-        m_forklftCommandLayout.add("Close Clamp", BotCommands.closeClamp);
         m_forklftCommandLayout.add("Reset Encoders", BotCommands.resetEncoders);
 
         m_autoCommandLayout.add("Place Cube Inner", BotCommands.placeCubeInner);
@@ -155,7 +153,7 @@ public class Shuffler {
         m_autoCommandLayout.add("Default", BotCommands.defaultAutoCommand);
 
         m_autoIndividualCommandLayout.add("Balance Charge Station", new BalanceChargeStation(BotSubsystems.swerveDriver, true));
-        m_autoIndividualCommandLayout.add("Eject Cube", new EjectCube(BotSubsystems.intake, 1));
+        //m_autoIndividualCommandLayout.add("Eject Cube", new EjectCube(BotSubsystems.intake, 1));
         m_autoIndividualCommandLayout.add("Place Cube", new PlaceCube());
 
         m_limelightCommandsLayout.add("Enter Zone", BotCommands.enterZone);

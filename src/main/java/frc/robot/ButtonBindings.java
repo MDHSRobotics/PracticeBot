@@ -15,7 +15,7 @@ public class ButtonBindings {
     public static void configureXbox1ButtonBindings() {
         Logger.setup("Configure Buttons -> Xbox Controller 1...");
 
-        //Toggle Feild Orientated Driving
+        //Toggle Field Orientated Driving
         BotControllers.xbox1.btnTriangle.onTrue(BotCommands.toggleOrientation);
 
         //Lock the wheels
@@ -37,10 +37,6 @@ public class ButtonBindings {
         BotControllers.xbox2.btnA.onTrue(BotCommands.forkliftPickUpPosition);
         BotControllers.xbox2.btnY.onTrue(BotCommands.forkliftHighLevelPosition);
         BotControllers.xbox2.btnX.onTrue(BotCommands.forkliftMediumLevelPosition);
-
-        // Pneumatics
-        BotControllers.xbox2.btnBumperLeft.onTrue(BotCommands.openClamp);
-        BotControllers.xbox2.btnBumperRight.onTrue(BotCommands.closeClamp);
 
     }
 

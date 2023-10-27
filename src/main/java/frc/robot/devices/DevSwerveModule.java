@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration; 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,8 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DevSwerveModule {
 
     private final String m_name;
-    private final DevTalonFX m_driveMotor;
-    private final DevTalonFX m_turningMotor;
+    private final DevSparkMax m_driveMotor;
+    private final DevSparkMax m_turningMotor;
 
     private final PIDController m_turningPidController;
 
@@ -40,7 +41,7 @@ public class DevSwerveModule {
     private final double GEAR_RATIO_DRIVE = 8.16;
     private final double GEAR_RATIO_TURNING = 12.8;
 
-    public DevSwerveModule(String moduleName, DevTalonFX driveTalon, DevTalonFX steerTalon, CANCoder canCoder,
+    public DevSwerveModule(String moduleName, DevSparkMax driveSparkMax, DevSparkMax steerSparkMax, CANCoder canCoder,
             boolean driveMotorReversed, boolean turningMotorReversed, boolean absoluteEncoderReversed, double encoderOffset) {
 
         m_name = moduleName;
@@ -48,20 +49,20 @@ public class DevSwerveModule {
         m_absoluteEncoderReversed = absoluteEncoderReversed;
         m_absoluteEncoderOffsetRad = encoderOffset;
 
-        m_driveMotor = driveTalon;
-        m_turningMotor = steerTalon;
+        m_driveMotor = driveSparkMax;
+        m_turningMotor = steerSparkMax;
 
         m_driveMotor.setInverted(driveMotorReversed);
         m_turningMotor.setInverted(turningMotorReversed);
-        m_driveMotor.setNeutralMode(NeutralMode.Brake);
+        m_driveMotor.setIdleMode(IdleMode.kBrake);
 
-        m_driveMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 15, 15, 20));   
-        m_turningMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 15, 15, 20));   
+        m_driveMotor.setSmartCurrentLimit(15);
+        m_turningMotor.setSmartCurrentLimit(15);
 
-        m_driveMotor.setNeutralMode(NeutralMode.Brake);
-        m_turningMotor.setNeutralMode(NeutralMode.Brake);
-
-        m_driveMotor.configOpenloopRamp(DRIVE_RAMP_TIME);
+        m_driveMotor.setIdleMode(IdleMode.kBrake);
+        m_turningMotor.setIdleMode(IdleMode.kBrake);
+        
+        m_driveMotor.setOpenLoopRampRate(DRIVE_RAMP_TIME);
 
         m_turningPidController = new PIDController(P_TURNING, 0, 0);
         m_turningPidController.enableContinuousInput(-Math.PI, Math.PI);
@@ -78,32 +79,32 @@ public class DevSwerveModule {
         resetEncoders();
 
         // Group the contents of the module together in SmartDashboard
-        SendableRegistry.setName(m_driveMotor, "Module " + m_name, "Drive Motor");
-        SendableRegistry.setName(m_turningMotor, "Module " + m_name, "Turning Motor");
+        //SendableRegistry.setName(m_driveMotor, "Module " + m_name, "Drive Motor");
+        //SendableRegistry.setName(m_turningMotor, "Module " + m_name, "Turning Motor");
 
         m_encoderTranslator = new EncoderTranslator("TalonFX", 1, 12.8);
     }
 
     public double getDrivePositionMeters() {
-        double ticks = m_driveMotor.getSelectedSensorPosition();
+        double ticks = m_driveMotor.getEncoder().getPosition();
         double positionInMeters = m_drivingEncoderTranslate.ticks_to_distance(ticks);
         return positionInMeters;
     }
 
     public double getTurningPositionRadians() {
-        double turnTicks = m_turningMotor.getSelectedSensorPosition();
+        double turnTicks = m_turningMotor.getEncoder().getPosition();
         double turnRadians = m_turningEncoderTranslate.ticks_to_radians(turnTicks);
         return turnRadians;
     }
 
     public double getDriveVelocityMPS() {
-        double driveVelocityTPHMS = m_driveMotor.getSelectedSensorVelocity();
+        double driveVelocityTPHMS = m_driveMotor.getEncoder().getVelocity();
         double driveVelocityMPS = m_drivingEncoderTranslate.ticksPerDecisecond_to_velocity(driveVelocityTPHMS);
         return driveVelocityMPS;
     }
 
     public double getTurningVelocityRadiansPS() {
-        double turningVelocityTPHMS = m_turningMotor.getSelectedSensorVelocity();
+        double turningVelocityTPHMS = m_turningMotor.getEncoder().getVelocity();
         double turningVelocityRPS = m_turningEncoderTranslate.ticksPerDecisecond_to_RadiansPerSecond(turningVelocityTPHMS);
         return turningVelocityRPS;
     }
@@ -146,9 +147,9 @@ public class DevSwerveModule {
     public double[] getEncoderReadings() {
         double[] readings = new double[4];
 
-        readings[0] = m_driveMotor.getSelectedSensorPosition();
+        readings[0] = m_driveMotor.getEncoder().getPosition();
         readings[1] = getDrivePositionMeters();
-        readings[2] = m_turningMotor.getSelectedSensorPosition();
+        readings[2] = m_turningMotor.getEncoder().getPosition();
         readings[3] = getTurningPositionRadians() / Math.PI * 180.;
 
         return readings;
@@ -156,7 +157,7 @@ public class DevSwerveModule {
 
     public void resetEncoders() {
         // Set drive motor encoder to Zero
-        m_driveMotor.setSelectedSensorPosition(0.0);
+        m_driveMotor.getEncoder().setPosition(0.0);
 
         // Get the initial angle of the absolute encoder in radians
         double initialAbsoluteEncoderPositionRad = getAbsoluteEncoderRadians();
@@ -165,7 +166,7 @@ public class DevSwerveModule {
         double initialAbsoluteEncoderPositionTicks = m_turningEncoderTranslate.radians_to_ticks(initialAbsoluteEncoderPositionRad);
         
         // Set the current position of the turning motor based on absolute encoder 
-        m_turningMotor.setSelectedSensorPosition(initialAbsoluteEncoderPositionTicks);
+        m_turningMotor.getEncoder().setPosition(initialAbsoluteEncoderPositionTicks);
 
         // Report absolute encoder info to SmartDashboard
         //SmartDashboard.putNumber("Absolute Encoder Angle (Radians): " + m_name, initialAbsoluteEncoderPositionRad);
@@ -214,9 +215,10 @@ public class DevSwerveModule {
     /*public void setShuffleboardBrain() {
         SwerveDriverBrain.setModuleEncoderReadings(m_name, getEncoderReadings());
     }*/
-
-    public void setTurningWheelPosition(double angle){
-        m_turningMotor.set(ControlMode.Position, m_encoderTranslator.degrees_to_ticks(angle + Math.toDegrees(m_absoluteEncoderOffsetRad)));
+    
+    
+    public void setTurningWheelPosition(double angle){  
+        m_turningMotor.set(m_encoderTranslator.degrees_to_ticks(angle + Math.toDegrees(m_absoluteEncoderOffsetRad)));
     }
 
     /*public void setAbsoluteEncoderOffset(){
