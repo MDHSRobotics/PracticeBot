@@ -28,7 +28,7 @@ public class AutoFactory extends SequentialCommandGroup {
 
             case "Top":
                 //Place the cube on the top row
-                addCommands(new PlaceCube());
+                //addCommands(new PlaceCube());
                 isSideways = false;
                 break;
 
@@ -41,7 +41,7 @@ public class AutoFactory extends SequentialCommandGroup {
         switch (location){
             case "Center":
                 // We're located in the center so balance on the charge station
-                addCommands(new BalanceChargeStation(BotSubsystems.swerveDriver, isSideways));
+                //addCommands(new BalanceChargeStation(BotSubsystems.swerveDriver, isSideways));
                 break;
         
             //This is relative to the driver facing the field
@@ -49,39 +49,39 @@ public class AutoFactory extends SequentialCommandGroup {
             case "Right":
                 // We're located on the right or left so back out of community area
 
-                double backingSpeed = AutoConstants.DEFAULT_DRIVE_SPEED;
+                //double backingSpeed = AutoConstants.DEFAULT_DRIVE_SPEED;
                 // The side to side direction is opposite for Left and Right placements
-                double sideToSideSpeed = (location == "Left") ? -AutoConstants.DEFAULT_DRIVE_SPEED : AutoConstants.DEFAULT_DRIVE_SPEED;
+                //double sideToSideSpeed = (location == "Left") ? -AutoConstants.DEFAULT_DRIVE_SPEED : AutoConstants.DEFAULT_DRIVE_SPEED;
 
                 double x1Speed, y1Speed, time1;
                 double x2Speed, y2Speed, time2;
                 if (isSideways) {
                     // The robot is initially positioned sideways, pointing toward the right
-                    x1Speed = sideToSideSpeed;
+                    //x1Speed = sideToSideSpeed;
                     y1Speed = 0.;
                     time1 = SIDEWAYS_TIME;
                     x2Speed = 0.;
-                    y2Speed = backingSpeed;
+                    //y2Speed = backingSpeed;
                     time2 = DRIVE_OUT_TIME;
                 
                 }   else {
                     // The robot is initially positioned toward the wall
                     x1Speed = 0.;
-                    y1Speed = sideToSideSpeed;
+                    //y1Speed = sideToSideSpeed;
                     time1 = SIDEWAYS_TIME;
-                    x2Speed = -backingSpeed;
+                    //x2Speed = -backingSpeed;
                     y2Speed = 0.;
                     time2 = DRIVE_OUT_TIME;
                 }
 
                 //Move to the side of the field to clear the charge station
-                addCommands(new TimedSwerve(BotSubsystems.swerveDriver, x1Speed, y1Speed, 0., time1));
+                //addCommands(new TimedSwerve(BotSubsystems.swerveDriver, x1Speed, y1Speed, 0., time1));
                 
                 //Lift the claw
-                addCommands(new LiftClaw(BotSubsystems.forklift, 0.2));
+                //addCommands(new LiftClaw(BotSubsystems.forklift, 0.2));
 
                 //Drive outside the community
-                addCommands(new TimedSwerve(BotSubsystems.swerveDriver, x2Speed, y2Speed, 0., time2));
+                //addCommands(new TimedSwerve(BotSubsystems.swerveDriver, x2Speed, y2Speed, 0., time2));
 
                 break;
             

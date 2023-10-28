@@ -31,9 +31,6 @@ public class BotCommands {
 
     // Forklift
     public static MoveForklift moveForklift;
-    public static ForkliftToPosition forkliftPickUpPosition;
-    public static ForkliftToPosition forkliftHighLevelPosition;
-    public static ForkliftToPosition forkliftMediumLevelPosition;
     public static QuickForklift quickForklift;
     public static CommandBase resetEncoders;
 
@@ -71,9 +68,6 @@ public class BotCommands {
  
         // Forklift
         moveForklift = new MoveForklift(BotSubsystems.forklift); 
-        forkliftPickUpPosition = new ForkliftToPosition(BotSubsystems.forklift, AutoConstants.Levels.PICKUP); 
-        forkliftMediumLevelPosition = new ForkliftToPosition(BotSubsystems.forklift, AutoConstants.Levels.MEDIUM);
-        forkliftHighLevelPosition = new ForkliftToPosition(BotSubsystems.forklift, AutoConstants.Levels.HIGH);
         quickForklift = new QuickForklift(BotSubsystems.forklift);
 
         resetEncoders = BotSubsystems.forklift.resetEncoders();

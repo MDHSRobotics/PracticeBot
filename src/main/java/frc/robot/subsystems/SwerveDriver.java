@@ -147,10 +147,10 @@ public class SwerveDriver extends SubsystemBase {
 
     // Constructs new SwerveDriver
     public SwerveDriver() {
-        //talonFxSwerveDriveFL.configOpenloopRamp(RAMP_TIME);
-        //talonFxSwerveDriveFR.configOpenloopRamp(RAMP_TIME);
-        //talonFxSwerveDriveRL.configOpenloopRamp(RAMP_TIME);
-        //talonFxSwerveDriveRR.configOpenloopRamp(RAMP_TIME);
+        sparkMaxSwerveDriveFL.setOpenLoopRampRate(RAMP_TIME);
+        sparkMaxSwerveDriveFR.setOpenLoopRampRate(RAMP_TIME);
+        sparkMaxSwerveDriveRL.setOpenLoopRampRate(RAMP_TIME);
+        sparkMaxSwerveDriveRR.setOpenLoopRampRate(RAMP_TIME);
 
         sparkMaxSwerveDriveFL.setIdleMode(IdleMode.kBrake);
         sparkMaxSwerveDriveFR.setIdleMode(IdleMode.kBrake);

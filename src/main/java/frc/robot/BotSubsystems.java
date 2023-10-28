@@ -10,7 +10,6 @@ public class BotSubsystems {
     public static SwerveDriver swerveDriver;
     public static Forklift forklift;
     //public static Intake intake;
-    public static GenericSubsystem flipper;
 
     public static void initializeSubsystems() {
         Logger.setup("Initializing BotSubsystems...");
@@ -19,7 +18,6 @@ public class BotSubsystems {
         swerveDriver = new SwerveDriver();
         forklift = new Forklift();
         //intake = new Intake();
-        flipper = new GenericSubsystem(Map.of("sparkMaxFlipper", 21));
     }
 
     public static void setTeleopDefaultCommands() {

@@ -19,22 +19,22 @@ public class MoveForklift extends CommandBase {
     private ShuffleboardLayout motorSpeedsLayout = Shuffler.constructLayout(Shuffler.m_forkliftTab, "Motor Speeds", 4, 0, 6, 3, 1, 2, "LEFT");
     private ShuffleboardLayout motorEncodersLayout = Shuffler.constructLayout(Shuffler.m_forkliftTab, "Motor Encoders", 0, 3, 4, 2, 1, 2, "LEFT");
 
-    private GenericEntry extenderSpeedEntry = motorSpeedsLayout
-        .add("Extender Speed", 1.0)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 1.0))
-        .getEntry();
     private GenericEntry elevatorSpeedEntry = motorSpeedsLayout
         .add("Elevator Speed", 1.0)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 1.0))
         .getEntry();
-    
-    private GenericEntry extenderEncoderEntry = motorEncodersLayout
-        .add("Extender Encoder", 0)
+    private GenericEntry armLiftSpeedEntry = motorSpeedsLayout
+        .add("ArmLift Speed", 1.0)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 1.0))
         .getEntry();
+    
     private GenericEntry elevatorEncoderEntry = motorEncodersLayout
         .add("Elevator Encoder", 0)
+        .getEntry();
+    private GenericEntry armLiftEncoderEntry = motorEncodersLayout
+        .add("ArmLift Encoder", 0)
         .getEntry();
     
 
@@ -53,20 +53,23 @@ public class MoveForklift extends CommandBase {
 
     @Override
     public void execute() {
-        double extenderPower = BotControllers.xbox2.xbox.getRightY();
         double elevatorPower = BotControllers.xbox2.xbox.getLeftY();
+        double armLiftPower = BotControllers.xbox2.xbox.getRightY();
+        
 
-        m_forklift.move("Extender", extenderPower * extenderSpeedEntry.getDouble(1.0));
         m_forklift.move("Elevator", elevatorPower * elevatorSpeedEntry.getDouble(1.0));
+        m_forklift.move("ArmLift", armLiftPower * armLiftSpeedEntry.getDouble(1.0));
+        
 
         double clawPower = BotControllers.xbox2.xbox.getLeftTriggerAxis() - BotControllers.xbox2.xbox.getRightTriggerAxis();
         m_forklift.move("ClawLift", clawPower);
 
-        //Logger.info("Claw power: " + clampLiftPower + " Extender Power: " + extenderPower + " Elevator Power: " + elevatorPower);
+        //Logger.info("Claw power: " + clawPower + " ArmLift Power: " + armLiftPower + " Elevator Power: " + elevatorPower);
 
         //Retrieve Shuffleboard data from subsystem
-        extenderEncoderEntry.setDouble(m_forklift.getEncoderPosition("Extender"));
-        elevatorEncoderEntry.setDouble(m_forklift.getEncoderPosition("Elevator"));
+        //elevatorEncoderEntry.setDouble(m_forklift.getEncoderPosition("sparkMaxElevator"));
+        //armLiftEncoderEntry.setDouble(m_forklift.getEncoderPosition("sparkMaxArmLift"));
+        
     }
 
     // This command continues until interrupted

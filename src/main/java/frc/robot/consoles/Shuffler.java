@@ -152,9 +152,9 @@ public class Shuffler {
         m_autoCommandLayout.add("Eject Cube Right", BotCommands.ejectCubeRight);
         m_autoCommandLayout.add("Default", BotCommands.defaultAutoCommand);
 
-        m_autoIndividualCommandLayout.add("Balance Charge Station", new BalanceChargeStation(BotSubsystems.swerveDriver, true));
+        //m_autoIndividualCommandLayout.add("Balance Charge Station", new BalanceChargeStation(BotSubsystems.swerveDriver, true));
         //m_autoIndividualCommandLayout.add("Eject Cube", new EjectCube(BotSubsystems.intake, 1));
-        m_autoIndividualCommandLayout.add("Place Cube", new PlaceCube());
+        //m_autoIndividualCommandLayout.add("Place Cube", new PlaceCube());
 
         m_limelightCommandsLayout.add("Enter Zone", BotCommands.enterZone);
         m_limelightCommandsLayout.add("Align Gyro", BotCommands.alignGyro);

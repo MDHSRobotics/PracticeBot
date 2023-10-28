@@ -37,7 +37,7 @@ public class QuickForklift extends CommandBase {
             m_forklift.move("ClawLift", -0.6);
         }else{
             m_forklift.move("ClawLift", -0.35);
-            m_forklift.move("Extender", -0.965);
+            m_forklift.move("ArmLift", -0.965);
         }
     }
 

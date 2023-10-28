@@ -1,4 +1,3 @@
-
 package frc.robot.devices;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
