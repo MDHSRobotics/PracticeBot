@@ -64,7 +64,7 @@ public class MoveForklift extends CommandBase {
         double clawPower = BotControllers.xbox2.xbox.getLeftTriggerAxis() - BotControllers.xbox2.xbox.getRightTriggerAxis();
         m_forklift.move("ClawLift", clawPower);
 
-        //Logger.info("Claw power: " + clawPower + " ArmLift Power: " + armLiftPower + " Elevator Power: " + elevatorPower);
+        Logger.info("Claw power: " + clawPower + " ArmLift Power: " + armLiftPower + " Elevator Power: " + elevatorPower);
 
         //Retrieve Shuffleboard data from subsystem
         //elevatorEncoderEntry.setDouble(m_forklift.getEncoderPosition("sparkMaxElevator"));
